@@ -102,17 +102,22 @@ export default new Vuex.Store({
     },
 
     async loadRooms({ commit, state }) {
-      const response = await axios.get(`${API}/api/room`);
-      const data = response.data;
-      const rooms = data.rooms;
-      if (Array.isArray(rooms) && rooms.length) {
-        const room = rooms[0]; //Se toma un unico chat como se solicita en el requerimiento
-        chatClient.init(`${API}${room.namespaceName}`, state.user);
-        room.history.forEach((element) => {
-          commit("addMessage", element);
-        });
+      try {
+        const token = localStorage.getItem("tokenkuepa");
+        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+        const response = await axios.get(`${API}/api/room`);
+        const data = response.data;
+        const rooms = data.rooms;
+        if (Array.isArray(rooms) && rooms.length) {
+          const room = rooms[0]; //Se toma un unico chat como se solicita en el requerimiento
+          chatClient.init(`${API}${room.namespaceName}`, state.user);
+          room.history.forEach((element) => {
+            commit("addMessage", element);
+          });
+        }
+      } catch (error) {
+        console.log(error);
       }
-      //   console.log(data);
     },
 
     sendMessage({ commit, state }, content) {
