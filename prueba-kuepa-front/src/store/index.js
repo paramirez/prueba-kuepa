@@ -75,7 +75,9 @@ export default new Vuex.Store({
           localStorage.setItem("tokenkuepa", data.token);
           const userDecode = JSON.parse(atob(data.token.split(".")[1]));
           commit("setUser", userDecode);
-          router.push("/chat");
+          setTimeout(() => {
+            router.push("/chat");
+          }, 1000);
         }
       } catch (error) {
         return "Usuario o contraseña incorrectos";

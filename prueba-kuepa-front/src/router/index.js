@@ -39,7 +39,6 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   const token = localStorage.getItem("tokenkuepa");
   if (token && !store.state.login) {
-    console.log(1);
     store.dispatch("reloadSession");
   }
   next();
